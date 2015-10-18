@@ -1,0 +1,30 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 {path}"
+    exit 1
+fi
+
+cd "$1"
+
+echo -n "Moving everything into '_x': "
+mkdir _x
+find . -maxdepth 1 -not -name _x -and -not -name . -print0 | xargs -0 mv -i -t _x
+echo done
+
+echo -n "Rebuilding dirs: "
+(cd _x && find . -xdev -type d -not -name .) | sort | xargs -d '\n' mkdir
+echo done
+
+echo -n "Moving files: "
+(cd _x && find . -xdev -type f) | sort | while read f; do
+    mv -i "_x/$f" "$f"
+    echo -n .
+done
+echo done
+
+echo -n "Removing empty dirs in '_x': "
+find _x -xdev -type d | tac | xargs -d '\n' rmdir
+echo done

@@ -17,3 +17,17 @@ usage
 ```
 sortdirs [path]
 ```
+
+caveats/bugs
+------------
+
+Won't work if you have filenames with newlines.
+
+Depends on your filesystem driver to fill available directory entry slots in order. The linux "vfat" driver seems to meet this requirement. Others drivers probably do too. YMMV.
+
+No man page.
+
+license
+-------
+
+[Apache 2.0](LICENSE)
